@@ -1,5 +1,3 @@
-/* MMM-VESAR.css */
-
 .MMM-VESAR table {
   width: 100%;
   border-spacing: 0.5rem 0.25rem;
@@ -18,15 +16,17 @@
   text-transform: uppercase;
 }
 
+.MMM-VESAR td.date {
+  font-size: 0.9rem;
+}
+
 /* Icon cell  */
 .MMM-VESAR .vesar-icon {
-  width: 3rem;
-  height: 3rem;
+  width: 2rem;
+  height: 2rem;
   margin-right: 0.5rem;
   vertical-align: middle;
-  /* if you want a border/radius: */
-  border: 1px solid #333;
-  border-radius: 0.25rem;
+  display: inline-block;
 }
 
 /* Waste type label cell */
@@ -35,18 +35,19 @@
   font-weight: 500;
 }
 
+/* Date label */
+.MMM-VESAR .dateLabel {
+  font-size: 0.85em;
+  color: #ccc;
+}
+.MMM-VESAR .daysLabel {
+  font-size: 1em;
+  font-weight: bold;
+}
+
 /* Dim past pickups */
 .MMM-VESAR tr.dimmed {
   opacity: 0.5;
-}
-
-/* Header text */
-.MMM-VESAR .small {
-  font-size: 0.8rem;
-}
-
-.MMM-VESAR .light {
-  color: #fff;
 }
 
 /* Flex‐container option if you want to use it for a row */

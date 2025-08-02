@@ -1,0 +1,9 @@
+{
+  "loading": "Laster",
+  "today": "i dag",
+  "tomorrow": "i morgen",
+  "days": "dager",
+  "day": "dag",
+  "week": "uke",
+  "next_dow": "Neste {day}"
+}

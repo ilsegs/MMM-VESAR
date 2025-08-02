@@ -1,0 +1,9 @@
+{
+  "loading": "Loading",
+  "today": "today",
+  "tomorrow": "tomorrow",
+  "days": "days",
+  "day": "day",
+  "week": "week",
+  "next_dow": "Next {day}"
+}

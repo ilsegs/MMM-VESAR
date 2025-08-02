@@ -1,6 +1,14 @@
+const wasteTypeTranslations = {
+  Restavfall: "Residual waste",
+  Plastemballasje: "Plastic packaging",
+  "Papp og papir": "Cardboard and paper",
+  Matavfall: "Food waste",
+  "Glass- og metallemballasje": "Glass and metal packaging",
+};
+
 Module.register("MMM-VESAR", {
   defaults: {
-    header: "Tømmeplan",
+    header: "Neste hentedag for avfall",
     address: "Stasjonsveien 1, Horten",
 
     // Date formatting
@@ -86,28 +94,21 @@ Module.register("MMM-VESAR", {
       if (daysUntil < 7) {
         return dateObj.format("dddd");
       }
-      if (daysUntil < 14) {
-        return this.translate("next_dow", { day: dateObj.format("dddd") });
-      }
     }
-
     return dateObj.format(this.config.dateFormat);
   },
 
   // Loader for icons
   getImage(iconPath) {
-    let src = iconPath;
-    const filename = iconPath.split("/").pop();
-    src = this.file(`icons/${filename}`);
-
     const img = document.createElement("img");
-    img.src = src;
+    img.src = iconPath;
     img.className = "vesar-icon";
     img.alt = "";
     return img;
   },
 
   getDom() {
+    moment.locale("nb"); // Norwegian Bokmål
     const wrapper = document.createElement("div");
     wrapper.style.minWidth = this.config.minWidth + "px";
 
@@ -155,30 +156,30 @@ Module.register("MMM-VESAR", {
       if (this.config.displayWasteType) {
         const td = document.createElement("td");
         td.className = "align-left small wasteType light";
-        td.innerHTML = type;
+        td.innerHTML = wasteTypeTranslations[type] || type;
         row.appendChild(td);
       }
 
       // Date cell
       const dateCell = document.createElement("td");
-      let dateText = "";
       const m = moment(info.date);
-      if (this.config.displayNumberOfDays) {
-        dateText = this.getNumberOfDaysLabel(moment().startOf("day"), m);
-      } else {
-        dateText = this.getDateString(info.date);
-      }
-      // optional raw date
-      if (this.config.displayDate) {
-        dateText +=
-          (dateText ? " (" : "") +
-          m.format(this.config.dateFormat) +
-          (dateText ? ")" : "");
-      }
-      dateCell.className = "date";
-      dateCell.innerHTML = dateText;
-      row.appendChild(dateCell);
 
+      let daysLabel = "";
+      let dateLabel = "";
+      if (this.config.displayNumberOfDays) {
+        daysLabel = this.getNumberOfDaysLabel(moment().startOf("day"), m);
+      }
+      if (this.config.displayDate || !this.config.displayNumberOfDays) {
+        dateLabel = this.getDateString(info.date);
+      } else {
+        dateLabel = m.format(this.config.dateFormat);
+      }
+
+      // Compose cell: daysLabel first, then dateLabel below
+      dateCell.className = "date";
+      dateCell.innerHTML = `<div class="daysLabel">${daysLabel}</div><div class="dateLabel">${dateLabel}</div>`;
+
+      row.appendChild(dateCell);
       // dim past
       if (m.isBefore(moment().startOf("day"))) {
         row.classList.add("dimmed");
