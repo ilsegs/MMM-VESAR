@@ -10,7 +10,7 @@ module.exports = NodeHelper.create({
   getPickupDates: function (address) {
     let self = this;
     // Step 1: Search for the address to get the ID
-    const searchUrl = `https://vesar.no/umbraco/api/address/search/?term=${encodeURIComponent(
+    const searchUrl = `https://vesar.no/umbraco/api/address/suggest?term=${encodeURIComponent(
       address
     )}`;
     request.get(
