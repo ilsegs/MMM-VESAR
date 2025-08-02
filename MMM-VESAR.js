@@ -1,11 +1,3 @@
-const wasteTypeTranslations = {
-  Restavfall: "Residual waste",
-  Plastemballasje: "Plastic packaging",
-  "Papp og papir": "Cardboard and paper",
-  Matavfall: "Food waste",
-  "Glass- og metallemballasje": "Glass and metal packaging",
-};
-
 Module.register("MMM-VESAR", {
   defaults: {
     header: "Neste hentedag for avfall",
@@ -156,7 +148,7 @@ Module.register("MMM-VESAR", {
       if (this.config.displayWasteType) {
         const td = document.createElement("td");
         td.className = "align-left small wasteType light";
-        td.innerHTML = wasteTypeTranslations[type] || type;
+        td.innerHTML = type;
         row.appendChild(td);
       }
 

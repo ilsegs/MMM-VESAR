@@ -1,6 +1,6 @@
 .MMM-VESAR table {
   width: 100%;
-  border-spacing: 0.5rem 0.25rem;
+  border-spacing: 0.4rem 0.2rem;
 }
 
 .MMM-VESAR tr.medium {
@@ -9,7 +9,7 @@
 
 .MMM-VESAR td {
   vertical-align: middle;
-  padding: 0.25rem 0.5rem;
+  padding: 0.2rem 0.4rem;
 }
 
 .MMM-VESAR td.date:first-letter {
@@ -24,7 +24,7 @@
 .MMM-VESAR .vesar-icon {
   width: 2rem;
   height: 2rem;
-  margin-right: 0.5rem;
+  margin-right: 0.2rem;
   vertical-align: middle;
   display: inline-block;
 }
