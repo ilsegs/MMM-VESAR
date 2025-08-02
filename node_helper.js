@@ -1,88 +1,81 @@
 // node_helper.js
 const NodeHelper = require("node_helper");
-const request = require("request");
+const fetch = require("node-fetch");
 const cheerio = require("cheerio");
 const moment = require("moment");
 let addressCache = {};
 
 module.exports = NodeHelper.create({
-  start: function () {
+  start() {
     console.log("MMM-VESAR helper started…");
   },
 
-  lookupAddress: function (address, cb) {
+  async lookupAddress(address, cb) {
     address = encodeURIComponent(address.trim());
     if (addressCache[address]) {
       return cb(null, addressCache[address]);
     }
     const lookupUrl = `https://vesar.no/umbraco/api/address/search?query=${address}`;
-    request.get(
-      { url: lookupUrl, json: true, timeout: 5000 },
-      (err, res, body) => {
-        if (
-          err ||
-          res.statusCode !== 200 ||
-          !Array.isArray(body) ||
-          body.length === 0
-        ) {
-          return cb(new Error("Adresse ikke funnet"));
-        }
-        const adresseId = body[0].Id || body[0].id;
-        addressCache[address] = adresseId;
-        cb(null, adresseId);
+    try {
+      let res = await fetch(lookupUrl, { timeout: 5000 });
+      if (!res.ok) throw new Error(res.statusText);
+      let body = await res.json();
+      if (!Array.isArray(body) || body.length === 0) {
+        throw new Error("Adresse ikke funnet");
       }
-    );
+      const adresseId = body[0].Id || body[0].id;
+      addressCache[address] = adresseId;
+      cb(null, adresseId);
+    } catch (e) {
+      cb(new Error(e.message));
+    }
   },
 
-  _fetchPickupDates: function (adresseId) {
+  async _fetchPickupDates(adresseId) {
     const self = this;
     const url = `https://vesar.no/umbraco/api/address/pickupdays/?id=${adresseId}`;
-    request.get({ url, json: true, timeout: 5000 }, (error, res, body) => {
-      if (error || !body || typeof body.html !== "string") {
-        console.error("MMM-VESAR: Invalid / pickupdays response", error);
-        return self.sendSocketNotification("PICKUP_DATES", {
-          error: "Kan ikke hente hentetider",
-        });
+    try {
+      let res = await fetch(url, { timeout: 5000 });
+      if (!res.ok) throw new Error(res.statusText);
+      let body = await res.json();
+      if (!body || typeof body.html !== "string") {
+        throw new Error("Invalid pickupdays response");
       }
 
-      // load the returned HTML
       const $ = cheerio.load(body.html);
       const pickupDates = {};
 
-      // for each column in .pickup-dates
       $(".pickup-dates .row .col").each((i, el) => {
         const $el = $(el);
-        const imgSrc = $el.find("img").attr("src"); // e.g. "/media/yhjja3d4/matavfall.jpg"
-        const type = $el.find("div").first().text().trim(); // e.g. "Matavfall"
-        const rawDate = $el.find("h2").text().trim(); // e.g. "tirsdag 05.aug."
-
-        // parse rawDate into a moment object
-        // we know Oslo locale is needed
+        const imgSrc = $el.find("img").attr("src");
+        const type = $el.find("div").first().text().trim();
+        const rawDate = $el.find("h2").text().trim();
         moment.locale("nb");
-        const date = moment(rawDate, "dddd DD.MMM.", "nb");
-
-        // store both the ISO date and the icon path
+        const mDate = moment(rawDate, "dddd DD.MMM.", "nb");
         pickupDates[type] = {
-          date: date.isValid() ? date.toISOString() : null,
+          date: mDate.isValid() ? mDate.toISOString() : null,
           icon: imgSrc,
         };
       });
 
       self.sendSocketNotification("PICKUP_DATES", pickupDates);
-    });
+    } catch (e) {
+      console.error("MMM-VESAR:", e);
+      self.sendSocketNotification("PICKUP_DATES", {
+        error: "Kan ikke hente hentetider",
+      });
+    }
   },
 
-  socketNotificationReceived: function (notification, payload) {
+  socketNotificationReceived(notification, payload) {
     if (notification === "GET_PICKUP_DATES") {
-      // first do address → ID
-      this.lookupAddress(payload, (err, adresseId) => {
+      this.lookupAddress(payload, (err, id) => {
         if (err) {
           return this.sendSocketNotification("PICKUP_DATES", {
             error: err.message,
           });
         }
-        // then fetch the real pickup dates
-        this._fetchPickupDates(adresseId);
+        this._fetchPickupDates(id);
       });
     }
   },

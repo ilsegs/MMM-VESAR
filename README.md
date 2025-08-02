@@ -22,7 +22,7 @@ git clone [https://github.com/ilsegs/MMM-Vesar]
 Go to the module directory and pull the latest changes:
 
 ```bash
-cd ~/MagicMirror/modules/MMM-Template
+cd ~/MagicMirror/modules/MMM-Vesar
 git pull
 ```
 
@@ -36,7 +36,7 @@ To use this module, you have to add a configuration object to the modules array 
   position: "top_right",  // or wherever you like
   header: "Mitt avfall",
   config: {
-    header: "Tømmeplan"
+    header: "Tømmeplan",
     address: "Stasjonsveien 1",
     blnLabel: true,
     blnDate: true,
