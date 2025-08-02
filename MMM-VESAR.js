@@ -1,19 +1,17 @@
 Module.register("MMM-VESAR", {
   defaults: {
     header: "Tømmeplan",
-    address: "Stasjonsveien 1",
+    address: "Stasjonsveien 1, Horten",
 
-    // Date formatting (Oslo logic)
+    // Date formatting
     useHumanFormat: "by_week", // "by_week" or "strict"
     dateFormat: "dddd Do MMM", // fallback format
 
-    // TRV-style flags
+    // Display options
     numberOfWeeks: 3, // unused (we show one row per type)
-    blnNumberOfDays: true, // show "(2 dager)"
-    blnDate: false, // show raw date next to label
-    blnLabel: false, // inline label instead of separate column
-
-    // Display
+    displayNumberOfDays: true, // show "(2 dager)"
+    displayDate: false, // show raw date next to label
+    displayLabel: false, // inline label instead of separate column
     showHeader: true,
     displayIcons: true,
     displayWasteType: true,
@@ -56,7 +54,6 @@ Module.register("MMM-VESAR", {
     }
   },
 
-  // Oslo’s human-friendly date logic
   getNumberOfDaysLabel(today, pickUpDate) {
     let days = pickUpDate.diff(today, "days");
     let label = this.translate(days === 1 ? "day" : "days");
@@ -97,12 +94,16 @@ Module.register("MMM-VESAR", {
     return dateObj.format(this.config.dateFormat);
   },
 
-  // Loader for Vesar icons
+  // Loader for icons
   getImage(iconPath) {
-    const filename = iconPath.split("/").pop(); // "matavfall.jpg"
+    let src = iconPath;
+    const filename = iconPath.split("/").pop();
+    src = this.file(`icons/${filename}`);
+
     const img = document.createElement("img");
-    img.src = this.file(`icons/${filename}`);
+    img.src = src;
     img.className = "vesar-icon";
+    img.alt = "";
     return img;
   },
 
@@ -162,13 +163,13 @@ Module.register("MMM-VESAR", {
       const dateCell = document.createElement("td");
       let dateText = "";
       const m = moment(info.date);
-      if (this.config.blnNumberOfDays) {
+      if (this.config.displayNumberOfDays) {
         dateText = this.getNumberOfDaysLabel(moment().startOf("day"), m);
       } else {
         dateText = this.getDateString(info.date);
       }
       // optional raw date
-      if (this.config.blnDate) {
+      if (this.config.displayDate) {
         dateText +=
           (dateText ? " (" : "") +
           m.format(this.config.dateFormat) +

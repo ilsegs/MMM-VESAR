@@ -37,10 +37,10 @@ To use this module, you have to add a configuration object to the modules array 
   header: "Mitt avfall",
   config: {
     header: "Tømmeplan",
-    address: "Stasjonsveien 1",
-    blnLabel: true,
-    blnDate: true,
-    blnNumberOfDays: false,
+    address: "Stasjonsveien 1, Horten",
+    displayLabel: true,
+    displayDate: true,
+    displayNumberOfDays: false,
     displayIcons: true,
     displayWasteType: true,
     exclusions: ["Restavfall"]
@@ -50,16 +50,16 @@ To use this module, you have to add a configuration object to the modules array 
 
 ### Configuration options
 
-| Option             | Possible values | Default           | Description                                        |
-| ------------------ | --------------- | ----------------- | -------------------------------------------------- |
-| `header`           | `string`        | "Tømmeplan"       | Header text, change or set empty string to remove. |
-| `address`          | `string`        | "Stasjonsveien 1" | Change to your own address.                        |
-| `blnLabel`         | `string`        | false             | Display label.                                     |
-| `blnDate`          | `string`        | false             | Display next pickup date.                          |
-| `blnNumberOfDays`  | `string`        | false             | Display number of days until next pickup.          |
-| `displayIcons`     | `string`        | true              | Display icons                                      |
-| `displayWasteType` | `boolean`       | true              | Display type of waste in text.                     |
-| `exclusions`       | `string`        | []                | Waste types to exclude from list.                  |
+| Option                | Possible values | Default                   | Description                                                                    |
+| --------------------- | --------------- | ------------------------- | ------------------------------------------------------------------------------ |
+| `header`              | `string`        | "Tømmeplan"               | Header text, change or set empty string to remove.                             |
+| `address`             | `string`        | "Stasjonsveien 1, Horten" | Change to your own address and town - use exact formatting as default example. |
+| `displayLabel`        | `string`        | false                     | Display label.                                                                 |
+| `displayDate`         | `string`        | false                     | Display next pickup date.                                                      |
+| `displayNumberOfDays` | `string`        | false                     | Display number of days until next pickup.                                      |
+| `displayIcons`        | `string`        | true                      | Display icons                                                                  |
+| `displayWasteType`    | `boolean`       | true                      | Display type of waste in text.                                                 |
+| `exclusions`          | `string`        | []                        | Waste types to exclude from list.                                              |
 
 ##### Inspired by:
 

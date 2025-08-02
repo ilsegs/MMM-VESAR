@@ -1,82 +1,52 @@
-// node_helper.js
 const NodeHelper = require("node_helper");
-const fetch = require("node-fetch");
+const request = require("request");
 const cheerio = require("cheerio");
 const moment = require("moment");
-let addressCache = {};
 
 module.exports = NodeHelper.create({
-  start() {
-    console.log("MMM-VESAR helper started…");
+  start: function () {
+    console.log("Starting node helper for: " + this.name);
   },
 
-  async lookupAddress(address, cb) {
-    address = encodeURIComponent(address.trim());
-    if (addressCache[address]) {
-      return cb(null, addressCache[address]);
-    }
-    const lookupUrl = `https://vesar.no/umbraco/api/address/search?query=${address}`;
-    try {
-      let res = await fetch(lookupUrl, { timeout: 5000 });
-      if (!res.ok) throw new Error(res.statusText);
-      let body = await res.json();
-      if (!Array.isArray(body) || body.length === 0) {
-        throw new Error("Adresse ikke funnet");
+  getPickupDates: function (address) {
+    let self = this;
+    let url = `https://vesar.no/tommeplan?address=${encodeURIComponent(
+      address
+    )}`;
+    request.get(url, function (error, response) {
+      const pickup_dates = {};
+      if (error || !response || !response.body) {
+        self.sendSocketNotification("PICKUP_DATES", {
+          error: "Could not fetch data",
+        });
+        return;
       }
-      const adresseId = body[0].Id || body[0].id;
-      addressCache[address] = adresseId;
-      cb(null, adresseId);
-    } catch (e) {
-      cb(new Error(e.message));
-    }
-  },
+      const $ = cheerio.load(response.body);
 
-  async _fetchPickupDates(adresseId) {
-    const self = this;
-    const url = `https://vesar.no/umbraco/api/address/pickupdays/?id=${adresseId}`;
-    try {
-      let res = await fetch(url, { timeout: 5000 });
-      if (!res.ok) throw new Error(res.statusText);
-      let body = await res.json();
-      if (!body || typeof body.html !== "string") {
-        throw new Error("Invalid pickupdays response");
-      }
-
-      const $ = cheerio.load(body.html);
-      const pickupDates = {};
-
-      $(".pickup-dates .row .col").each((i, el) => {
-        const $el = $(el);
-        const imgSrc = $el.find("img").attr("src");
-        const type = $el.find("div").first().text().trim();
-        const rawDate = $el.find("h2").text().trim();
-        moment.locale("nb");
-        const mDate = moment(rawDate, "dddd DD.MMM.", "nb");
-        pickupDates[type] = {
-          date: mDate.isValid() ? mDate.toISOString() : null,
-          icon: imgSrc,
-        };
-      });
-
-      self.sendSocketNotification("PICKUP_DATES", pickupDates);
-    } catch (e) {
-      console.error("MMM-VESAR:", e);
-      self.sendSocketNotification("PICKUP_DATES", {
-        error: "Kan ikke hente hentetider",
-      });
-    }
-  },
-
-  socketNotificationReceived(notification, payload) {
-    if (notification === "GET_PICKUP_DATES") {
-      this.lookupAddress(payload, (err, id) => {
-        if (err) {
-          return this.sendSocketNotification("PICKUP_DATES", {
-            error: err.message,
-          });
+      $("table.pickup-table tr").each((_idx, el) => {
+        let category = $(el).find("td:nth-child(1)").text().trim();
+        let pickup_date = moment(
+          $(el).find("td:nth-child(2)").text().trim(),
+          "DD.MM.YYYY"
+        );
+        if (category && pickup_date.isValid()) {
+          pickup_dates[category] = pickup_date;
         }
-        this._fetchPickupDates(id);
       });
+
+      if (Object.keys(pickup_dates).length == 0) {
+        self.sendSocketNotification("PICKUP_DATES", {
+          error: "No pickup dates found",
+        });
+      } else {
+        self.sendSocketNotification("PICKUP_DATES", pickup_dates);
+      }
+    });
+  },
+
+  socketNotificationReceived: function (message, payload) {
+    if (message === "GET_PICKUP_DATES") {
+      this.getPickupDates(payload);
     }
   },
 });
