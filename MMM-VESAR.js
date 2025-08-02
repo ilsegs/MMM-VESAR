@@ -1,3 +1,5 @@
+console.log("Language:", this.config.language);
+console.log("Translate loading:", this.translate("loading"));
 Module.register("MMM-VESAR", {
   defaults: {
     header: "Neste hentedag for avfall",
@@ -100,6 +102,7 @@ Module.register("MMM-VESAR", {
   },
 
   getDom() {
+    console.log("Translation test:", this.translate("today"));
     moment.locale("nb"); // Norwegian Bokmål
     const wrapper = document.createElement("div");
     wrapper.style.minWidth = this.config.minWidth + "px";
