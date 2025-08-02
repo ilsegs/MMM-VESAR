@@ -23,6 +23,13 @@ Module.register("MMM-VESAR", {
     animationSpeed: 1000,
   },
 
+  getTranslations() {
+    return {
+      en: "translations/en.json",
+      nb: "translations/nb.json",
+    };
+  },
+
   getScripts() {
     return ["moment.js"];
   },
@@ -79,7 +86,9 @@ Module.register("MMM-VESAR", {
         return dateObj.format("dddd");
       }
       if (weekDiff === 1) {
-        return this.translate("next_dow", { day: dateObj.format("dddd") });
+        const dayName = dateObj.format("dddd");
+        const nextDowTemplate = this.translate("next_dow");
+        return nextDowTemplate.replace("{day}", dayName);
       }
     } else if (this.config.useHumanFormat === "strict") {
       const daysUntil = dateObj.diff(now, "days");
@@ -100,7 +109,6 @@ Module.register("MMM-VESAR", {
   },
 
   getDom() {
-    console.log("Translation test:", this.translate("today"));
     moment.locale("nb"); // Norwegian Bokmål
     const wrapper = document.createElement("div");
     wrapper.style.minWidth = this.config.minWidth + "px";
