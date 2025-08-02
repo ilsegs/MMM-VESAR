@@ -22,7 +22,7 @@ module.exports = NodeHelper.create({
           });
           return;
         }
-        // Pick the first result (you could do fuzzy matching if you want)
+        // Pick the first result and extract the ID
         const addr = body[0];
         const id = addr.Id || addr.id;
         if (!id) {
@@ -32,7 +32,7 @@ module.exports = NodeHelper.create({
           return;
         }
 
-        // Step 2: Fetch pickup dates JSON
+        // Fetch pickup dates JSON
         const pickupUrl = `https://vesar.no/umbraco/api/address/pickupdays/?id=${id}`;
         request.get(
           { url: pickupUrl, json: true },

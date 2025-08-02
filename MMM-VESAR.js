@@ -1,5 +1,3 @@
-console.log("Language:", this.config.language);
-console.log("Translate loading:", this.translate("loading"));
 Module.register("MMM-VESAR", {
   defaults: {
     header: "Neste hentedag for avfall",
@@ -10,7 +8,7 @@ Module.register("MMM-VESAR", {
     dateFormat: "dddd Do MMM", // fallback format
 
     // Display options
-    numberOfWeeks: 3, // unused (we show one row per type)
+
     displayNumberOfDays: true, // show "(2 dager)"
     displayDate: false, // show raw date next to label
     displayLabel: false, // inline label instead of separate column
@@ -173,8 +171,8 @@ Module.register("MMM-VESAR", {
       // Compose cell: daysLabel first, then dateLabel below
       dateCell.className = "date";
       dateCell.innerHTML = `<div class="daysLabel">${daysLabel}</div><div class="dateLabel">${dateLabel}</div>`;
-
       row.appendChild(dateCell);
+
       // dim past
       if (m.isBefore(moment().startOf("day"))) {
         row.classList.add("dimmed");

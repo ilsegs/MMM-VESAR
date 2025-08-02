@@ -3,6 +3,21 @@
   "version": "1.1.0",
   "description": "MagicMirror module to display waste collection data from VESAR",
   "main": "MMM-VESAR.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ilsegs/MMM-VESAR.git"
+  },
+  "keywords": [
+    "magicmirror",
+    "module",
+    "vesar",
+    "waste",
+    "garbage",
+    "collection",
+    "norway",
+    "vestfold",
+    "avfall"
+  ],
   "dependencies": {
     "moment": "^2.29.1",
     "cheerio": "^1.0.0-rc.12",

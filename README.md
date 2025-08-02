@@ -98,6 +98,40 @@ For advanced changes (such as supporting other regions, more languages, or custo
 - **Add new translations:**  
   Create translation files in the `translations/` folder (e.g., `nb.json` for Norwegian, `en.json` for English).
 
+## Troubleshooting
+
+- If nothing is displayed:
+
+  - Check MagicMirror logs (`pm2 logs mm`).
+  - Make sure your config block has no syntax errors.
+  - Verify you ran `npm install` in the `MMM-VESAR` directory.
+  - Open your MagicMirror in a browser and check the developer console for errors.
+
+- If the module is not updating:
+
+  - Ensure your address is valid and covered by VESAR.
+  - Try restarting MagicMirror: `pm2 restart mm`.
+
+- For network access, ensure your MagicMirror config allows remote access:
+  ```js
+  address: "0.0.0.0",
+  ipWhitelist: [],
+  ```
+
+## Changelog
+
+See the [CHANGELOG.md](CHANGELOG.md) for version history and updates.
+
+## Contributing
+
+Pull requests are welcome! Please open an issue first to discuss major changes.
+
+- Fork the repo
+- Create your feature branch (`git checkout -b feature/MyFeature`)
+- Commit changes (`git commit -am 'Add new feature'`)
+- Push to your branch (`git push origin feature/MyFeature`)
+- Open a pull request
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
