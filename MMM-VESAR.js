@@ -9,7 +9,7 @@ Module.register("MMM-VESAR", {
 
     // Display options
     displayNumberOfDays: true, // show "(2 dager)"
-    displayDate: false,
+    displayDate: true,
     showHeader: true,
     displayIcons: true,
     displayWasteType: true,

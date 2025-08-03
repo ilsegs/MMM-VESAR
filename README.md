@@ -14,6 +14,11 @@ This is a MagicMirror² module for showing upcoming garbage collection dates for
 
 ## Installation
 
+### Prerequisite
+
+You must have [MagicMirror²](https://magicmirror.builders/) installed and running first.  
+MMM-VESAR is a module for MagicMirror and will not work as a standalone application.
+
 ### Install
 
 In your terminal, go to the modules directory and clone the repository:
@@ -32,6 +37,16 @@ cd ~/MagicMirror/modules/MMM-Vesar
 git pull
 ```
 
+## Dependencies
+
+MMM-VESAR depends on the following Node.js packages, which are installed automatically when you run `npm install` in the module directory:
+
+- **moment**: Used for date formatting and calculations.
+- **cheerio**: Used for parsing HTML returned from the VESAR API.
+- **node-fetch**: Used for making HTTP requests.
+
+**Note:** You need to have MagicMirror² installed and running before you can use this module.
+
 ## Configuration
 
 To use this module, you have to add a configuration object to the modules array in the `config/config.js` file.
@@ -44,12 +59,13 @@ To use this module, you have to add a configuration object to the modules array 
     header: "Neste hentedag for avfall",
     address: "Stasjonsveien 1, Horten",
     useHumanFormat: "by_week",
+    dateFormat: "dddd Do MMM",
     showHeader: true,
     displayDate: true,
     displayNumberOfDays: true,
     displayIcons: true,
     displayWasteType: true,
-    exclusions: ["Restavfall"]
+    exclusions: []
   }
 }
 ```
@@ -60,10 +76,11 @@ To use this module, you have to add a configuration object to the modules array 
 | --------------------- | ------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `header`              | string  | "Neste hentedag for avfall" | Header text. Change or set empty string to remove.                                                                                                                                                                        |
 | `address`             | string  | "Stasjonsveien 1, Horten"   | Change to your own address and town (use exact formatting as shown). This module covers Tønsberg, Horten, Sandefjord, Larvik, Holmestrand, Færder. Check [vesar.no](https://vesar.no/) to see if your address is covered. |
+| `dateFormat`          | string  | "dddd Do MMM"               | Date format string, using [Moment.js tokens](https://momentjs.com/docs/#/displaying/format/). Example: `"dddd Do MMM"` for "Monday 4th Aug".                                                                              |
 | `useHumanFormat`      | string  | "by_week"                   | How to format pickup dates. `"by_week"` formats as day of week, `"strict"` as raw date.                                                                                                                                   |
 | `showHeader`          | boolean | true                        | Show the header above the table.                                                                                                                                                                                          |
-| `displayDate`         | boolean | false                       | Show the next pickup date.                                                                                                                                                                                                |
-| `displayNumberOfDays` | boolean | false                       | Show number of days until next pickup (e.g. "2 dager").                                                                                                                                                                   |
+| `displayDate`         | boolean | true                        | Show the next pickup date.                                                                                                                                                                                                |
+| `displayNumberOfDays` | boolean | true                        | Show number of days until next pickup (e.g. "2 dager").                                                                                                                                                                   |
 | `displayIcons`        | boolean | true                        | Display icons for each waste type.                                                                                                                                                                                        |
 | `displayWasteType`    | boolean | true                        | Display the type of waste in text.                                                                                                                                                                                        |
 | `exclusions`          | array   | []                          | Waste types to exclude from the list. Example: `["Restavfall"]`                                                                                                                                                           |
@@ -77,19 +94,28 @@ You can easily customize MMM-VESAR to fit your needs:
   Make sure the format matches exactly as used on [vesar.no](https://vesar.no).
 
 - **Show or hide details:**  
-  Toggle `displayDate`, and `displayNumberOfDays` to show what you prefer (e.g., only show "today", only show dates, etc.).
+  Use `displayDate` to show the next pickup date, and `displayNumberOfDays` to show the number of days until the next pickup ("today", "tomorrow", or "2 dager").  
+  You can enable both, either, or neither, to control which information is shown.
+
+- **Format dates:**  
+  The `useHumanFormat` option lets you choose between `"by_week"` (display as day of week, e.g. "Monday") and `"strict"` (display the raw date).  
+  Use `dateFormat` to customize how the date is formatted (e.g. `"dddd Do MMM"` for "Monday 4th Aug"). See [Moment.js format docs](https://momentjs.com/docs/#/displaying/format/) for details.
 
 - **Icons and waste types:**  
-  Set `displayIcons` and `displayWasteType` to hide or show icons and text labels.
+  Set `displayIcons` to show or hide waste type icons.  
+  Set `displayWasteType` to show or hide the waste type name as text.
 
 - **Exclude waste types:**  
   Add types (e.g., `"Restavfall"`) to the `exclusions` array if you don't want them displayed.
 
-- **Translation:**  
-  The module supports Norwegian and English out of the box. Set `language: "nb"` or `language: "en"` in your main MagicMirror `config.js` for your preferred language.
+- **Show/hide header:**  
+  Use `showHeader` to show or hide the header above the table.
 
 - **Styling:**  
   To adjust sizes or colors, edit `MMM-VESAR.css` in the module folder.
+
+- **Translation:**  
+  The module supports Norwegian and English out of the box. Set `language: "nb"` or `language: "en"` in your main MagicMirror `config.js` for your preferred language.
 
 ## Advanced Modification
 
@@ -137,4 +163,4 @@ Pull requests are welcome! Please open an issue first to discuss major changes.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
