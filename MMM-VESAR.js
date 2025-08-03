@@ -8,10 +8,8 @@ Module.register("MMM-VESAR", {
     dateFormat: "dddd Do MMM", // fallback format
 
     // Display options
-
     displayNumberOfDays: true, // show "(2 dager)"
-    displayDate: false, // show raw date next to label
-    displayLabel: false, // inline label instead of separate column
+    displayDate: false,
     showHeader: true,
     displayIcons: true,
     displayWasteType: true,

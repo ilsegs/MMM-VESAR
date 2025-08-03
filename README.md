@@ -9,7 +9,8 @@ This is a MagicMirror² module for showing upcoming garbage collection dates for
 
 ## Screenshot
 
-![Example of MMM-Template](./example_1.png)
+![Afvallkalender large](images/mmm-vesar.png)
+![Afvallkalender small](images/mmm-vesar-medium.png)
 
 ## Installation
 
@@ -42,7 +43,8 @@ To use this module, you have to add a configuration object to the modules array 
   config: {
     header: "Neste hentedag for avfall",
     address: "Stasjonsveien 1, Horten",
-    displayLabel: true,
+    useHumanFormat: "by_week",
+    showHeader: true,
     displayDate: true,
     displayNumberOfDays: true,
     displayIcons: true,
@@ -54,16 +56,17 @@ To use this module, you have to add a configuration object to the modules array 
 
 ### Configuration options
 
-| Option                | Type    | Default                     | Description                                                                                                                                                                                                                                                |
-| --------------------- | ------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `header`              | string  | "Neste hentedag for avfall" | Header text. Change or set empty string to remove.                                                                                                                                                                                                         |
-| `address`             | string  | "Stasjonsveien 1, Horten"   | Change to your own address and town (use exact formatting as shown). This module is only covering the following areas at the moment: Tønsberg, Horten, Sandefjord, Larvik, Holmestrand, Færder. Check https://vesar.no/ to see if your address is covered. |
-| `displayLabel`        | boolean | false                       | Show a human-friendly label (e.g. "today", "tomorrow") for pickup dates.                                                                                                                                                                                   |
-| `displayDate`         | boolean | false                       | Show the next pickup date.                                                                                                                                                                                                                                 |
-| `displayNumberOfDays` | boolean | false                       | Show number of days until next pickup.                                                                                                                                                                                                                     |
-| `displayIcons`        | boolean | true                        | Display icons for each waste type.                                                                                                                                                                                                                         |
-| `displayWasteType`    | boolean | true                        | Display the type of waste in text.                                                                                                                                                                                                                         |
-| `exclusions`          | array   | []                          | Waste types to exclude from the list.                                                                                                                                                                                                                      |
+| Option                | Type    | Default                     | Description                                                                                                                                                                                                               |
+| --------------------- | ------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `header`              | string  | "Neste hentedag for avfall" | Header text. Change or set empty string to remove.                                                                                                                                                                        |
+| `address`             | string  | "Stasjonsveien 1, Horten"   | Change to your own address and town (use exact formatting as shown). This module covers Tønsberg, Horten, Sandefjord, Larvik, Holmestrand, Færder. Check [vesar.no](https://vesar.no/) to see if your address is covered. |
+| `useHumanFormat`      | string  | "by_week"                   | How to format pickup dates. `"by_week"` formats as day of week, `"strict"` as raw date.                                                                                                                                   |
+| `showHeader`          | boolean | true                        | Show the header above the table.                                                                                                                                                                                          |
+| `displayDate`         | boolean | false                       | Show the next pickup date.                                                                                                                                                                                                |
+| `displayNumberOfDays` | boolean | false                       | Show number of days until next pickup (e.g. "2 dager").                                                                                                                                                                   |
+| `displayIcons`        | boolean | true                        | Display icons for each waste type.                                                                                                                                                                                        |
+| `displayWasteType`    | boolean | true                        | Display the type of waste in text.                                                                                                                                                                                        |
+| `exclusions`          | array   | []                          | Waste types to exclude from the list. Example: `["Restavfall"]`                                                                                                                                                           |
 
 ## Customization
 
@@ -74,7 +77,7 @@ You can easily customize MMM-VESAR to fit your needs:
   Make sure the format matches exactly as used on [vesar.no](https://vesar.no).
 
 - **Show or hide details:**  
-  Toggle `displayLabel`, `displayDate`, and `displayNumberOfDays` to show what you prefer (e.g., only show "today", only show dates, etc.).
+  Toggle `displayDate`, and `displayNumberOfDays` to show what you prefer (e.g., only show "today", only show dates, etc.).
 
 - **Icons and waste types:**  
   Set `displayIcons` and `displayWasteType` to hide or show icons and text labels.

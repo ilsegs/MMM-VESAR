@@ -9,13 +9,13 @@ module.exports = NodeHelper.create({
 
   getPickupDates: function (address) {
     let self = this;
-    // Step 1: Search for the address to get the ID
+    //Search for the address to get the ID
     const searchUrl = `https://vesar.no/umbraco/api/address/suggest?term=${encodeURIComponent(
       address
     )}`;
     request.get(
       { url: searchUrl, json: true },
-      function (error, response, body) {
+      function (error, _response, body) {
         if (error || !body || !Array.isArray(body) || body.length === 0) {
           self.sendSocketNotification("PICKUP_DATES", {
             error: "Could not find address in VESAR system",
@@ -36,7 +36,7 @@ module.exports = NodeHelper.create({
         const pickupUrl = `https://vesar.no/umbraco/api/address/pickupdays/?id=${id}`;
         request.get(
           { url: pickupUrl, json: true },
-          function (err2, resp2, pickupBody) {
+          function (err2, _resp2, pickupBody) {
             if (err2 || !pickupBody || !pickupBody.html) {
               self.sendSocketNotification("PICKUP_DATES", {
                 error: "Could not fetch pickup dates",
