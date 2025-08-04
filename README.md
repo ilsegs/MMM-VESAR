@@ -25,7 +25,7 @@ In your terminal, go to the modules directory and clone the repository:
 
 ```bash
 cd ~/MagicMirror/modules
-git clone https://github.com/ilsegs/MMM-Vesar
+git clone https://github.com/ilsegs/MMM-VESAR
 ```
 
 ### Update
