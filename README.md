@@ -33,7 +33,7 @@ git clone https://github.com/ilsegs/MMM-VESAR
 Go to the module directory and pull the latest changes:
 
 ```bash
-cd ~/MagicMirror/modules/MMM-Vesar
+cd ~/MagicMirror/modules/MMM-VESAR
 git pull
 ```
 
